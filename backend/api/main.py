@@ -7,6 +7,9 @@ from pydantic import BaseModel
 from databases import Database
 from typing import List
 
+from routers.chatgpt import chatgpt_router
+from routers.wordsapi import words_router
+
 DATABASE_URL = "postgresql://root:secret@postgres:5432/mydb"
 database = Database(DATABASE_URL)
 
@@ -36,6 +39,8 @@ async def get_api_key(
 
 app = FastAPI()
 app.include_router(test.router, dependencies=[Depends(get_api_key)], tags=["ユーザー情報"])
+app.include_router(chatgpt_router)
+app.include_router(words_router,tags=["英単語辞書"])
 
 @app.get("/")
 def read_root():
